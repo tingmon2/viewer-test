@@ -54,7 +54,7 @@
     "lerna:customVersion": "node version.mjs",
     "link-list": "npm ls --depth=0 --link=true",
     "dev:google": "lerna run dev:google --stream",
-    "deploy": "lerna run build:viewer --stream && aws s3 sync platform/app/dist/ s3://testohif-orthanc-cors --acl public-read"
+    "deploy": "lerna run build:viewer"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.13",
