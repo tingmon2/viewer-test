@@ -42,7 +42,9 @@ pipeline {
         sh "git config user.name 'tingmon2'"
         sh "git add ."
         sh "git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'"
+        sh "echo 'helm push start'"
         sh "git push origin master"
+        sh "echo 'helm push done'"
         sh "docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}"
       }
     }
