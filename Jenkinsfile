@@ -13,6 +13,7 @@ pipeline {
     stage("pre-build") {
       steps {
         sh "cat /etc/*release"
+        sh "apt-get -y install wget"
         sh "wget https://github.com/mikefarah/yq/releases/download/v4.12.0/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq"
         sh "yq --version"
         sh "echo 'requested build version ${DESCRIPTION}-${VERSION}'"
