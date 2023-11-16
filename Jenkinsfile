@@ -13,10 +13,10 @@ pipeline {
     stage("pre-build") {
       steps {
         sh "cat /etc/*release"
-        sudo apt-get -y install wget
-        sh "systemctl status docker.service"
-        sh "wget https://github.com/mikefarah/yq/releases/download/v4.12.0/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq"
-        sh "yq --version"
+        // apt-get -y install wget
+        // sh "systemctl status docker.service"
+        // sh "wget https://github.com/mikefarah/yq/releases/download/v4.12.0/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq"
+        // sh "yq --version"
         sh "echo 'requested build version ${DESCRIPTION}-${VERSION}'"
         sh "echo 'login to docker hub...'"
         sh "echo '${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin'" // docker hub 로그인
