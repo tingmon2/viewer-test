@@ -18,7 +18,7 @@ pipeline {
         sh "pwd"
         sh "echo 'requested build version ${DESCRIPTION}-${VERSION}'"
         sh "echo 'login to docker hub...'"
-        sh "echo '${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin'"
+        sh "echo '${DOCKERHUB_CREDENTIALS_PSW}' | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
         echo '------------------------login success------------------------'
       }
     }
@@ -26,7 +26,7 @@ pipeline {
     stage("build") {
       steps {
         sh "echo 'start building docker image...'"
-        sh "echo 'asdf | docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} .'"
+        sh "docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} ."
         echo '------------------------build success------------------------'
       }
     }
@@ -35,7 +35,7 @@ pipeline {
       steps {
         sh """
           echo 'pushing docker image...'
-          echo 'asdf | docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}
           echo '------------------------push success------------------------'
 
           echo 'clone helm repo...'
@@ -58,7 +58,7 @@ pipeline {
           git push origin master
           echo 'helm push done'
 
-          echo 'asdf | docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          echo docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}
         """
 
 
