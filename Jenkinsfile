@@ -35,9 +35,9 @@ pipeline {
           echo 'pushing docker image...'
           echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
           echo '------------------------push success------------------------'
-          cd helm
+          cd helm/viewer-test
           sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
-          cd ../
+          cd ../../
           echo 'updating helm chart...'
           git config user.email 'tingmon2@gmail.com'
           git config user.name 'tingmon2'
