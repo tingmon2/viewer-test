@@ -23,7 +23,6 @@ pipeline {
       steps {
         sh "echo 'start building docker image...'"
         sh "echo 'docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} .'"
-        sh "echo '------------------------build success------------------------'"
       }
     }
 
@@ -31,24 +30,26 @@ pipeline {
       steps {
         script {
           sh
-          """
-          #!/bin/bash
-          echo 'pushing docker image...'"
-          echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
-          echo '------------------------push success------------------------'
-          cd helm
-          sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
-          cd ../
-          echo 'updating helm chart...'
-          git config user.email 'tingmon2@gmail.com'
-          git config user.name 'tingmon2'
-          git add .
-          git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'
-          echo 'helm push start'
-          git push origin master
-          echo 'helm push done'
-          echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
-          """
+            (
+              """
+              #!/bin/bash
+              echo 'pushing docker image...'"
+              echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+              echo '------------------------push success------------------------'
+              cd helm
+              sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
+              cd ../
+              echo 'updating helm chart...'
+              git config user.email 'tingmon2@gmail.com'
+              git config user.name 'tingmon2'
+              git add .
+              git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'
+              echo 'helm push start'
+              git push origin master
+              echo 'helm push done'
+              echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+              """
+            )
         }
         // sh "echo 'pushing docker image...'"
         // sh "echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
