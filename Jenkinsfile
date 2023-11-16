@@ -30,7 +30,7 @@ pipeline {
       steps {
         script {
           sh
-            (
+            '''
               """
               #!/bin/bash
               echo 'pushing docker image...'"
@@ -49,7 +49,7 @@ pipeline {
               echo 'helm push done'
               echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
               """
-            )
+            '''
         }
         // sh "echo 'pushing docker image...'"
         // sh "echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
