@@ -4,7 +4,7 @@ pipeline {
     DESCRIPTION = 'test'
     VERSION = '1.0.0'
     DOCKER_REPO = "tingmon/viewer-cicd"
-    DOCKERHUB_CREDENTIALS = credentials('docker-tingmon') // jenkins에 등록해 놓은 docker hub credentials 이름
+    DOCKERHUB_CREDENTIALS = credentials('docker-tingmon')
     DOCKER_IMAGE_TAG = "${DESCRIPTION}-${VERSION}"
     TEMP_FOLDER = "/home/jenkins/agent/workspace/new-helm"
     GITHUB_CREDENTIALS = credentials('tingmon2')
@@ -26,7 +26,7 @@ pipeline {
     stage("build") {
       steps {
         sh "echo 'start building docker image...'"
-        sh "echo 'docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} .'"
+        sh "echo 'asdf | docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} .'"
         echo '------------------------build success------------------------'
       }
     }
@@ -35,7 +35,7 @@ pipeline {
       steps {
         sh """
           echo 'pushing docker image...'
-          echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          echo 'asdf | docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
           echo '------------------------push success------------------------'
 
           echo 'clone helm repo...'
@@ -58,7 +58,7 @@ pipeline {
           git push origin master
           echo 'helm push done'
 
-          echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          echo 'asdf | docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
         """
 
 
