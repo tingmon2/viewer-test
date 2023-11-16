@@ -6,6 +6,7 @@ pipeline {
     DOCKER_REPO = "tingmon/viewer-cicd"
     DOCKERHUB_CREDENTIALS = credentials('docker-tingmon') // jenkins에 등록해 놓은 docker hub credentials 이름
     DOCKER_IMAGE_TAG = "${DESCRIPTION}-${VERSION}"
+    TEMP_FOLDER = "/home/jenkins/agent/workspace/new-helm"
   }
 
   stages {
@@ -37,11 +38,12 @@ pipeline {
           echo '------------------------push success------------------------'
 
           echo 'clone helm repo...'
-          mkdir /home/jenkins/agent/workspace/new-helm
-          cd /home/jenkins/agent/workspace/new-helm
+          mkdir ${TEMP_FOLDER}
+          cd ${TEMP_FOLDER}
           pwd
-          git clone 'https://github.com/tingmon2/helm-viewer-test.git'
-
+          ls -l
+          git clone -b master 'https://github.com/tingmon2/helm-viewer-test.git' ${TEMP_FOLDER}
+          ls -l
           echo 'manipulate helm chart...'
           sed -i "s/tag: 'change-me'/tag: '${DOCKER_IMAGE_TAG}'/" values.yaml
           cat values.yaml
