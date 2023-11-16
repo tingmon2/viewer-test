@@ -13,10 +13,6 @@ pipeline {
     stage("pre-build") {
       steps {
         sh "cat /etc/*release"
-        // apt-get -y install wget
-        // sh "systemctl status docker.service"
-        // sh "wget https://github.com/mikefarah/yq/releases/download/v4.12.0/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq"
-        // sh "yq --version"
         sh "echo 'requested build version ${DESCRIPTION}-${VERSION}'"
         sh "echo 'login to docker hub...'"
         sh "echo '${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin'" // docker hub 로그인
@@ -33,22 +29,42 @@ pipeline {
 
     stage("post-build") {
       steps {
-        sh "echo 'pushing docker image...'"
-        sh "echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
-        sh "echo '------------------------push success------------------------'"
-        sh "cd helm"
-        // sh "yq e -i '.image.tag = ${DOCKER_IMAGE_TAG}' ./values.yaml"
-        sed -i "s/tag: 'change-me'/tag: '\${DOCKER_IMAGE_TAG}'/" values.yaml
-        sh "cd ../"
-        sh "echo 'updating helm chart...'"
-        sh "git config user.email 'tingmon2@gmail.com'"
-        sh "git config user.name 'tingmon2'"
-        sh "git add ."
-        sh "git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'"
-        sh "echo 'helm push start'"
-        sh "git push origin master"
-        sh "echo 'helm push done'"
-        sh "echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
+        script {
+          sh
+          """
+          #!/bin/bash
+          echo 'pushing docker image...'"
+          echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          echo '------------------------push success------------------------'
+          cd helm
+          sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
+          cd ../
+          echo 'updating helm chart...'
+          git config user.email 'tingmon2@gmail.com'
+          git config user.name 'tingmon2'
+          git add .
+          git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'
+          echo 'helm push start'
+          git push origin master
+          echo 'helm push done'
+          echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
+          """
+        }
+        // sh "echo 'pushing docker image...'"
+        // sh "echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
+        // sh "echo '------------------------push success------------------------'"
+        // sh "cd helm"
+        // sh "sed -i "s/tag: 'change-me'/tag: '\${DOCKER_IMAGE_TAG}'/" values.yaml"
+        // sh "cd ../"
+        // sh "echo 'updating helm chart...'"
+        // sh "git config user.email 'tingmon2@gmail.com'"
+        // sh "git config user.name 'tingmon2'"
+        // sh "git add ."
+        // sh "git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'"
+        // sh "echo 'helm push start'"
+        // sh "git push origin master"
+        // sh "echo 'helm push done'"
+        // sh "echo 'docker rmi ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'"
       }
     }
   }
