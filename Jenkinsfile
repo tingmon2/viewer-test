@@ -29,7 +29,7 @@ pipeline {
     stage("post-build") {
       steps {
         sh """
-          echo 'pushing docker image...'"
+          echo 'pushing docker image...'
           echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
           echo '------------------------push success------------------------'
           cd helm
@@ -50,7 +50,7 @@ pipeline {
         //   sh (
         //       """
         //       #!/bin/bash
-        //       echo 'pushing docker image...'"
+        //       echo 'pushing docker image...'
         //       echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
         //       echo '------------------------push success------------------------'
         //       cd helm
