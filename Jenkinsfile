@@ -13,9 +13,11 @@ pipeline {
     stage("pre-build") {
       steps {
         sh "cat /etc/*release"
+        sh "pwd"
         sh "echo 'requested build version ${DESCRIPTION}-${VERSION}'"
         sh "echo 'login to docker hub...'"
-        sh "echo '${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin'" // docker hub 로그인
+        sh "echo '${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin'"
+        echo '------------------------login success------------------------'
       }
     }
 
@@ -23,6 +25,7 @@ pipeline {
       steps {
         sh "echo 'start building docker image...'"
         sh "echo 'docker build -t ${DOCKER_REPO}:${DOCKER_IMAGE_TAG} .'"
+        echo '------------------------build success------------------------'
       }
     }
 
