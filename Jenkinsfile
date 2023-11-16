@@ -39,6 +39,7 @@ pipeline {
           echo 'updating helm chart...'
           cd helm/viewer-test
           sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
+          cat values.yaml
           cd ../../
           pwd
           git init
