@@ -7,6 +7,7 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('docker-tingmon') // jenkins에 등록해 놓은 docker hub credentials 이름
     DOCKER_IMAGE_TAG = "${DESCRIPTION}-${VERSION}"
     TEMP_FOLDER = "/home/jenkins/agent/workspace/new-helm"
+    GITHUB_CREDENTIALS = credentials('tingmon2')
   }
 
   stages {
@@ -42,7 +43,7 @@ pipeline {
           cd ${TEMP_FOLDER}
           pwd
           ls -l
-          git clone -b master 'https://github.com/tingmon2/helm-viewer-test.git' ${TEMP_FOLDER}
+          git clone -b master 'https://tingmon2:${GITHUB_CREDENTIALS_PSW}@github.com/tingmon2/helm-viewer-test.git' ${TEMP_FOLDER}
           ls -l
           echo 'manipulate helm chart...'
           sed -i "s/tag: 'change-me'/tag: '${DOCKER_IMAGE_TAG}'/" values.yaml
