@@ -35,17 +35,20 @@ pipeline {
           echo 'pushing docker image...'
           echo 'docker push ${DOCKER_REPO}:${DOCKER_IMAGE_TAG}'
           echo '------------------------push success------------------------'
-
+          pwd
           echo 'updating helm chart...'
           cd helm/viewer-test
           sed -i "s/tag: 'change-me'/tag: '\$${DOCKER_IMAGE_TAG}'/" values.yaml
           cd ../../
+          pwd
           git init
           git config user.email 'tingmon2@gmail.com'
           git config user.name 'tingmon2'
           git add .
           git commit -m 'refactor - updated Helm chart values for dev environment with container image - ${DOCKER_IMAGE_TAG}'
+          git remote remove origin
           git remote add origin 'https://github.com/tingmon2/viewer-test.git'
+          git remote -v
           echo 'helm push start'
           git push origin master
           echo 'helm push done'
